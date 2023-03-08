@@ -1,0 +1,162 @@
+## Remote Sensing Indices ##
+# using R to automate and repeat some remote sensing indices: 
+# 1. we are to carry out NDVI, & NDWI for Kainji Lake, Nigeria for 3 different years and for dry and wet seasons.
+# plotting the pixels distribution charts using histogram for comparism.
+############################################################################################################
+# Note: Some codes are being commented, You can remove the comments.
+
+
+
+## Loading Libraries needed ###
+library(raster)
+library(rgdal)
+library(rgeos)
+library(RColorBrewer)
+library(sf)
+library(tidyverse)
+
+
+options(stringsAsFactors = FALSE)
+
+### Landsat Imageries of the study area were downloaded from USGS site.
+# and saved on our local disk
+
+# reading the imageries
+# L07_18753_0208 <- list.files("C:/RSG 507/LE07_L1TP_187053_20080216_20161230_01_T1",
+#            pattern = glob2rx("*B*.TIF$"),
+#            full.names = TRUE)
+
+# # Declare B3 & B4 for Dry 2008
+ L07_18753_0208_NW_B4 <- raster("C:/RSG 507/LE07_L1TP_187053_20080216_20161230_01_T1/LE07_187053_20080216_B4_GF.TIF")
+ L07_18753_0208_NW_B3 <- raster("C:/RSG 507/LE07_L1TP_187053_20080216_20161230_01_T1/LE07_187053_20080216_B3_GF.TIF")
+
+# Declare B3 & B4 for 501_landsat
+L08_B3 <- raster('landsat8_band3.tif') 
+L08_B4 <- raster('landsat8_band4.tif')
+
+ #Declare B3 & B4 for Wet 2008
+ L07_19753_1008_B3 <- raster("C:/RSG 507/LE07_L1TP_187053_20081029_20161224_01_T1/LE07_187053_20081029_B3.TIF")
+ L07_19753_1008_B4 <- raster("C:/RSG 507/LE07_L1TP_187053_20081029_20161224_01_T1/LE07_187053_20081029_B4.TIF")
+
+#  Declare B3 & B4 for Dry 2018
+ L07_18753_0218_B3 <- raster("C:/RSG 507/LE07_L1TP_187053_20180211_20180309_01_T1/LE07_187053_20180211_B3.TIF")
+ L07_18753_0218_B4 <- raster("C:/RSG 507/LE07_L1TP_187053_20180211_20180309_01_T1/LE07_187053_20180211_B4.TIF")
+# 
+# # Declare B3 & B4 for Wet 2018 
+ L07_187053_1118_B3 <- raster("C:/RSG 507/LE07_L1TP_187053_20181110_20181206_01_T1/LE07_187053_20181110_B3.TIF")
+ L07_187053_1118_B4 <- raster("C:/RSG 507/LE07_L1TP_187053_20181110_20181206_01_T1/LE07_187053_20181110_B4.TIF")
+# 
+# #  Declare B3 & B4 for Wet 1999
+ L07_187053_1099_B3 <- raster("C:/RSG 507/LE07_L1TP_187053_19991021_20170216_01_T1/LE07_187053_19991021_B3.TIF")
+ L07_187053_1099_B4 <- raster("C:/RSG 507/LE07_L1TP_187053_19991021_20170216_01_T1/LE07_187053_19991021_B4.TIF")
+# 
+# #  Declare B3 & B4 for Dry 1999
+ L05_187053_0299_B3 <- raster("C:/RSG 507/LT05_L1TP_187053_19990215_20161219_01_T1/LT05_187053_19990215_B3.TIF")
+ L05_187053_0299_B4 <- raster("C:/RSG 507/LT05_L1TP_187053_19990215_20161219_01_T1/LT05_187053_19990215_B4.TIF")
+# 
+
+# NDVI Funtion
+NDVI_fun <- function(B4,B3){
+   NDVI <- ((B4-B3)/(B4+B3))
+   return(NDVI)
+}
+
+# NDVI Outputs
+NDVI_507_L08 <-  NDVI_fun(L08_B3, L08_B4)
+View(NDVI_507_L08)
+
+ NDVI_L07_18753_0208_NW <- NDVI_fun(L07_18753_0208_NW_B4, L07_18753_0208_NW_B3)
+# 
+ NDVI_L07_19753_1008 <- NDVI_fun(L07_19753_1008_B4, L07_19753_1008_B3)
+# 
+ NDVI_L07_18753_0218 <- NDVI_fun(L07_18753_0218_B4, L07_18753_0218_B3)
+# 
+ NDVI_L07_187053_1118 <- NDVI_fun(L07_187053_1118_B4, L07_187053_1118_B3)
+# 
+ NDVI_L07_187053_1099 <- NDVI_fun(L07_187053_1099_B4, L07_187053_1099_B3)
+# 
+ NDVI_L05_187053_0299 <- NDVI_fun(L05_187053_0299_B4, L05_187053_0299_B3)
+# we can use ggplot lib and tmap lib to plot the output, 
+ # but we used plot function
+
+# plot NDVI Map 
+plot(NDVI_507_L08,
+     main = "NDVI of the Kainji Lake, 2019",
+     axes = FALSE, box = TRUE)
+
+     # coord_equal(xlim = c(15, 34), ylim = c(-36, -26), expand = 0))
+    
+
+# plot(NDVI_L07_18753_0208_NW,
+#      main = "NDVI of the Study Area Dry Season, 2008",
+#      axes = FALSE, box = FALSE,
+#      coord_equal(xlim = c(15, 34), ylim = c(-36, -26), expand = 0))
+
+ # Export as tif
+writeRaster(x =NDVI_507_L08,
+            filename= "NDVI_507_L08.tif",
+            format = "GTiff", # save as a tif
+            overwrite = TRUE)
+
+# writeRaster(x = NDVI_L07_18753_0208_NW,
+#             filename= "C:/RSG 507/Result/NDVI_L07_18753_0208.tif",
+#             format = "GTiff", # save as a tif
+#             overwrite = TRUE)
+#
+# writeRaster(x = NDVI_L07_19753_1008,
+#             filename= "C:/RSG 507/Result/NDVI_L07_19753_1008.tif",
+#             format = "GTiff", # save as a tif
+#             overwrite = TRUE)
+#
+# writeRaster(x = NDVI_L07_18753_0218,
+#             filename= "C:/RSG 507/Result/NDVI_L07_18753_0218.tif",
+#             format = "GTiff", # save as a tif
+#             overwrite = TRUE)
+#
+# writeRaster(x = NDVI_L07_187053_1118,
+#             filename= "C:/RSG 507/Result/NDVI_L07_187053_1118.tif",
+#             format = "GTiff", # save as a tif
+#             overwrite = TRUE)
+#
+# writeRaster(x = NDVI_L07_187053_1099,
+#             filename= "C:/RSG 507/Result/NDVI_L07_187053_1099.tif",
+#             format = "GTiff", # save as a tif
+#             overwrite = TRUE)
+#
+# writeRaster(x = NDVI_L05_187053_0299,
+#             filename= "C:/RSG 507/Result/NDVI_L05_187053_0299.tif",
+#             format = "GTiff", # save as a tif
+#             overwrite = TRUE)
+
+
+# NDVI histo
+hist(NDVI_507_L08, 
+     main = "NDVI: Distribution of pixels \n Kainji Lake @ 2008",
+     col = "Red",
+     xlab = "NDVI Index Value")
+
+# hist(NDVI_L07_19753_1008, 
+#      main = "NDVI: Distribution of pixels \n Wet Season 2008",
+#      col = "Dark green",
+#      xlab = "NDVI Index Value")
+# 
+# hist(NDVI_L07_18753_0218, 
+#      main = "NDVI: Distribution of pixels \n Dry Season 2018",
+#      col = "Red",
+#      xlab = "NDVI Index Value")
+# 
+# hist(NDVI_L07_187053_1118, 
+#      main = "NDVI: Distribution of pixels \n Wet Season 2018",
+#      col = "Dark green",
+#      xlab = "NDVI Index Value")
+# 
+# hist(NDVI_L05_187053_0299, 
+#      main = "NDVI: Distribution of pixels \n Dry Season 1999",
+#      col = "Red",
+#      xlab = "NDVI Index Value")
+# 
+# hist(NDVI_L07_187053_1099, 
+#      main = "NDVI: Distribution of pixels \n Wet Season 1999",
+#      col = "Dark green",
+#      xlab = "NDVI Index Value")
+# 
