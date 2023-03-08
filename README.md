@@ -3,7 +3,7 @@
 
 **Project: Spatio-Temporal Analysis.**
 
-**Overview:** Used R to automate spatio-temporal processes. 
+**Overview:** Used **R** to automate and carried out spatio-temporal analysis. 
 To measure vegetation and water content, two remote sensing indices were carried out, namely; Normalized Difference vegetation index (NDVI), and Normalized Difference water index (NDWI) using Landsat 7 & 5 Imageries of 1999, 2008, and 2018 for dry and wet seasons. 
 
 **Study Area**:Kainji Lake, Nigeria
