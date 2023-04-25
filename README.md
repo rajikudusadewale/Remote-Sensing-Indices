@@ -8,7 +8,7 @@ To measure vegetation and water content, two remote sensing indices were carried
 
 **Study Area**:Kainji Lake, Nigeria
 
-**Data Source**: United States Geological Surveys (https://earthexplorer.usgs.gov/)
+**Data Source** - United States Geological Surveys (https://earthexplorer.usgs.gov/)
 
 **NDVI** and **NDWI** are two different indices used to analyze remote sensing data, often from satellite imagery, to measure vegetation and water content respectively.
 
