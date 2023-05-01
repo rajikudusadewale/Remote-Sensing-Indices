@@ -18,7 +18,7 @@ NDWI stands for "Normalized Difference Water Index". It is calculated using **ne
 
 Both NDVI and NDWI are widely used in various applications, including agriculture, hydrology, and ecology, to monitor changes in vegetation and water content over time and space. 
 
-![Remote sensing_Indices_R script](https://github.com/rajikudusadewale/Remote-Sensing-Indices/blob/main/NDVI_NDWI)
+![Remote sensing Indices R script](https://github.com/rajikudusadewale/Remote-Sensing-Indices/blob/main/NDVI_NDWI)
 
 Histogram charts were created to:
 1. check the distrubution of pixels of Kainji Lake for each studied years (1999, 2008, & 2018)
